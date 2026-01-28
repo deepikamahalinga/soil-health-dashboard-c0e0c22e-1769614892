@@ -1,0 +1,26 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = []
+}
+
+model SoilReport {
+  id         String   @id @default(uuid()) @db.Uuid
+  state      String   @db.VarChar(100)
+  district   String   @db.VarChar(100)
+  village    String   @db.VarChar(100)
+  ph         Decimal  @db.Decimal(4,2)
+  nitrogen   Decimal  @db.Decimal(8,2)
+  phosphorus Decimal  @db.Decimal(8,2)
+  potassium  Decimal  @db.Decimal(8,2)
+  timestamp  DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([state, district, village], type: BTree, name: "idx_location")
+  @@map("soil_reports")
+}
